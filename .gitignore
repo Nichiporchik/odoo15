@@ -1,0 +1,20 @@
+# Exclude all local addons
+addons/*
+!addons/.gitkeep
+
+# Exclude all local configs
+configs/*
+!configs/.gitkeep
+
+# Exclude all secrets
+secrets/*
+!secrets/.gitkeep
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# pycharm dev env
+.idea/
+
+.env

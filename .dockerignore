@@ -1,0 +1,7 @@
+.*
+**/.git
+configs
+secrets
+docker-compose.yml
+Makefile
+README.md

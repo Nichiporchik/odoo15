@@ -1,0 +1,54 @@
+volumes:
+  data_psql:
+  data_odoo:
+
+secrets:
+  db_password:
+    file: ./secrets/postgres_password
+
+services:
+  odoo:
+    image: aurum/odoo-15
+    container_name: aurun_odoo
+    tty: true
+    ports:
+      - "8069:8069"
+    depends_on:
+      - db
+      - wdb
+    environment:
+      WDB_NO_BROWSER_AUTO_OPEN: 1
+      WDB_SOCKET_SERVER: wdb
+      WDB_SOCKET_PORT: 19840
+      WDB_WEB_SERVER: localhost
+      WDB_WEB_PORT: 1984
+      PASSWORD_FILE: /run/secrets/db_password
+    volumes:
+      - ./configs/odoo.conf:/opt/odoo/odoo.conf
+      - data_odoo:/opt/odoo/data
+      - ./odoo-src/odoo:/opt/odoo/odoo:ro
+      - ./odoo-src/enterprise:/opt/odoo/addons-enterprise:ro
+      - ./addons:/opt/odoo/addons:ro
+    secrets:
+      - db_password
+    command: ["odoo", "--dev", "wdb,reload,qweb,werkzeug,xml"]
+
+  db:
+    image: postgres:13-alpine
+    container_name: aurum_db
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    volumes:
+      - data_psql:/var/lib/postgresql/data
+    secrets:
+      - db_password
+    ports:
+      - "127.0.0.1:5432:5432"
+
+  wdb:
+    image: kozea/wdb:3.3.0
+    container_name: aurum_wdb
+    ports:
+      - "1984:1984"

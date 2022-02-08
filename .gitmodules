@@ -1,0 +1,6 @@
+[submodule "odoo-src/odoo"]
+	path = odoo-src/odoo
+	url = https://github.com/odoo/odoo.git
+[submodule "odoo-src/enterprise"]
+	path = odoo-src/enterprise
+	url = git@github.com:odoo/enterprise.git
